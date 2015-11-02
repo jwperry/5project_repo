@@ -43,4 +43,16 @@ class ResponseParser
     response << "Accept: #{get_accept(request_lines)}"
   end
 
+  def default_response(request_lines, client)
+    puts "Sending response."
+    response = "<pre>" + formatter(request_lines).join("\n") + "</pre>"
+    output = "<html><head></head><body>#{response}</body></html>"
+    headers =
+    client.puts headers
+    client.puts output
+    puts ["Wrote this response:", headers, output].join("\n")
+    client.close
+    puts "\nResponse complete, exiting."
+  end
+
 end
