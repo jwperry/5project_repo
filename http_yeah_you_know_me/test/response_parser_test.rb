@@ -41,13 +41,19 @@ class ResponseParserTest < Minitest::Test
   end
 
   def test_that_hello_response_outputs_correct_response
-    assert_equal "Hello world! (1)", parser.hello_response(request_lines)
+    assert_equal "Hello world! (1)", parser.hello_response
   end
 
   def test_that_hello_response_counter_increments
-    parser.hello_response(request_lines)
-    parser.hello_response(request_lines)
-    parser.hello_response(request_lines)
-    assert_equal "Hello world! (4)", parser.hello_response(request_lines)
+    parser.hello_response
+    parser.hello_response
+    parser.hello_response
+    assert_equal "Hello world! (4)", parser.hello_response
   end
+
+  def test_that_datetime_outputs_correct_response
+    time = DateTime.now
+    assert_equal time.strftime('%l:%M%P on %A, %B %-d, %Y'), parser.datetime_response
+  end
+
 end
