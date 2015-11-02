@@ -39,4 +39,15 @@ class ResponseParserTest < Minitest::Test
   def test_that_gets_accept
     assert_equal "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", parser.get_accept(request_lines)
   end
+
+  def test_that_hello_response_outputs_correct_response
+    assert_equal "Hello world! (1)", parser.hello_response(request_lines)
+  end
+
+  def test_that_hello_response_counter_increments
+    parser.hello_response(request_lines)
+    parser.hello_response(request_lines)
+    parser.hello_response(request_lines)
+    assert_equal "Hello world! (4)", parser.hello_response(request_lines)
+  end
 end
