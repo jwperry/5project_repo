@@ -1,8 +1,10 @@
 require 'pry'
 require 'socket'
 require './response_parser'
+require_relative 'parser'
 
-parser = ResponseParser.new
+parser = Parser.new
+response_parser = ResponseParser.new
 tcp_server = TCPServer.new(9292)
 
 counter = 0
@@ -19,18 +21,18 @@ loop do
 
   if parser.get_path(request_lines).start_with?("/word_search")
     word = parser.get_word(parser.get_path(request_lines))
-    parser.word_search(client, word)
+    response_parser.word_search_response(client, word)
   elsif parser.get_path(request_lines) == "/hello"
-    parser.hello_response(client, hello_counter)
+    response_parser.hello_response(client, hello_counter)
     hello_counter += 1
   elsif parser.get_path(request_lines) == "/datetime"
-    parser.datetime_response(client)
+    response_parser.datetime_response(client)
   elsif parser.get_path(request_lines) == "/shutdown"
-    parser.shutdown_response(counter, client)
+    response_parser.shutdown_response(counter, client)
     client.close
     break
   else
-    parser.default_response(request_lines, client)
+    response_parser.default_response(request_lines, client)
   end
 
   puts "Got this request:"

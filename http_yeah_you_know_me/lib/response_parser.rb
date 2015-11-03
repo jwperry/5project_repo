@@ -1,44 +1,21 @@
 require 'pry'
 require 'date'
+require_relative 'parser'
 class ResponseParser
 
-  def get_verb(string)
-    string[0].split(" ")[0]
-  end
-
-  def get_path(string)
-    string[0].split(" ")[1]
-  end
-
-  def get_protocol(string)
-    string[0].split(" ")[2]
-  end
-
-  def get_host(string)
-    string[1].split(":")[1].strip
-  end
-
-  def get_port(string)
-    string[1].split(":")[2]
-  end
-
-  def get_origin(string)
-    string[1].split(":")[1].strip
-  end
-
-  def get_accept(string)
-    string[4].split(" ")[1]
+  def setup
+    parser = Parser.new
   end
 
   def formatter(request_lines)
     response = []
-    response << "Verb: #{get_verb(request_lines)}"
-    response << "Path: #{get_path(request_lines)}"
-    response << "Protocol: #{get_protocol(request_lines)}"
-    response << "Host: #{get_host(request_lines)}"
-    response << "Port: #{get_port(request_lines)}"
-    response << "Origin: #{get_origin(request_lines)}"
-    response << "Accept: #{get_accept(request_lines)}"
+    response << "Verb: #{parser.get_verb(request_lines)}"
+    response << "Path: #{parser.get_path(request_lines)}"
+    response << "Protocol: #{parser.get_protocol(request_lines)}"
+    response << "Host: #{parser.get_host(request_lines)}"
+    response << "Port: #{parser.get_port(request_lines)}"
+    response << "Origin: #{parser.get_origin(request_lines)}"
+    response << "Accept: #{parser.get_accept(request_lines)}"
   end
 
   def default_response(request_lines, client)
@@ -79,7 +56,7 @@ class ResponseParser
     client.puts output
   end
 
-  def word_search(client, word)
+  def word_search_response(client, word)
     exists = check_for_word(word)
     if exists
       response = "<pre>" + "#{word.upcase} is a known word." + "</pre>"
@@ -90,10 +67,6 @@ class ResponseParser
     headers =
     client.puts headers
     client.puts output
-  end
-
-  def get_word(path)
-    word = path.split("=")[1]
   end
 
   def check_for_word(word)

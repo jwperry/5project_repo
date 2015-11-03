@@ -1,0 +1,8 @@
+Generating POSTs
+PostMan
+
+testing - mostly biz logic
+
+need Hurley
+server testing: start a server manually in first terminal window,
+and run test files in second window
