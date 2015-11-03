@@ -78,4 +78,27 @@ class ResponseParser
     client.puts headers
     client.puts output
   end
+
+  def word_search(client, word)
+    exists = check_for_word(word)
+    if exists
+      response = "<pre>" + "#{word.upcase} is a known word." + "</pre>"
+    else
+      response = "<pre>" + "#{word.upcase} is not a known word." + "</pre>"
+    end
+    output = "<html><head></head><body>#{response}</body></html>"
+    headers =
+    client.puts headers
+    client.puts output
+  end
+
+  def get_word(path)
+    word = path.split("=")[1]
+  end
+
+  def check_for_word(word)
+    dictionary = File.read("/usr/share/dict/words")
+    dictionary.include?(word)
+  end
+
 end
