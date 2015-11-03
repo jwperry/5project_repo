@@ -7,6 +7,7 @@ class ResponseParserTest < Minitest::Test
   attr_reader :parser, :request_lines
 
   def setup
+    @client = ""
     @parser = ResponseParser.new
     @request_lines = ["GET / HTTP/1.1", "Host: 127.0.0.1:9292", "Connection: keep-alive", "Cache-Control: max-age=0", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "Upgrade-Insecure-Requests: 1", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36", "Accept-Encoding: gzip, deflate, sdch", "Accept-Language: en-US,en;q=0.8"]
   end
@@ -40,20 +41,6 @@ class ResponseParserTest < Minitest::Test
     assert_equal "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", parser.get_accept(request_lines)
   end
 
-  def test_that_hello_response_outputs_correct_response
-    assert_equal "Hello world! (1)", parser.hello_response
-  end
-
-  def test_that_hello_response_counter_increments
-    parser.hello_response
-    parser.hello_response
-    parser.hello_response
-    assert_equal "Hello world! (4)", parser.hello_response
-  end
-
-  def test_that_datetime_outputs_correct_response
-    time = DateTime.now
-    assert_equal time.strftime('%l:%M%P on %A, %B %-d, %Y'), parser.datetime_response
-  end
+  
 
 end
