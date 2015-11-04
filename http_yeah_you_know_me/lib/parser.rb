@@ -32,5 +32,4 @@ class Parser
     word = path.split("=")[1]
   end
 
-
 end
