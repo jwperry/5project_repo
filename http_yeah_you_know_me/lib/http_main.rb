@@ -26,8 +26,10 @@ loop do
 
   path = parser.get_path(request_lines)
   client.puts "<pre> Good Luck! </pre>" if game.start_game?(request_lines, path)
-  # if /game && POST then send redirect
-  if path.start_with?("/game")
+  if path.start_with?("/game") && parser.get_verb(request_lines) == "POST"
+    guess = parser.get_guess(path)
+    `curl -G --data guess=6 "127.0.0.1.9292/game"`
+  elsif path.start_with?("/game")
     guess = parser.get_guess(path)
     output = game.check_guess(guess)
     client.puts output
