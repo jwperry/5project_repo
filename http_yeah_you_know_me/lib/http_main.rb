@@ -2,10 +2,12 @@ require 'pry'
 require 'socket'
 require_relative 'response_parser'
 require_relative 'parser'
+require_relative 'game'
 
 parser = Parser.new
 response_parser = ResponseParser.new
 tcp_server = TCPServer.new(9292)
+game = Game.new
 
 counter = 0
 hello_counter = 0
@@ -13,17 +15,23 @@ hello_counter = 0
 loop do
   counter += 1
   request_lines = []
-  client = tcp_server.accept
   puts "Ready for a request"
+  client = tcp_server.accept
+
+  # "POST /game?guess=4 HTTP/1.1",
 
   while line = client.gets and !line.chomp.empty?
     request_lines << line.chomp
   end
 
-  # if parser.get_verb(request_lines) == "POST"
-  #   puts "Totally a post"
   path = parser.get_path(request_lines)
-  if path.start_with?("/word_search")
+  client.puts "<pre> Good Luck! </pre>" if game.start_game?(request_lines, path)
+  # if /game && POST then send redirect
+  if path.start_with?("/game")
+    guess = parser.get_guess(path)
+    output = game.check_guess(guess)
+    client.puts output
+  elsif path.start_with?("/word_search")
     word = parser.get_word(path)
     output = response_parser.word_search_response(word)
     client.puts output

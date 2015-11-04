@@ -32,4 +32,7 @@ class Parser
     word = path.split("=")[1]
   end
 
+  def get_guess(path)
+    guess = path.split("=")[1]
+  end
 end
