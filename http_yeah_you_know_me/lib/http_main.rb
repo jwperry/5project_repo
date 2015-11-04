@@ -22,10 +22,15 @@ loop do
   while line = client.gets and !line.chomp.empty?
     request_lines << line.chomp
   end
-
+  verb = parser.get_verb(request_lines)
   path = parser.get_path(request_lines)
-  client.puts "<pre> Good Luck! </pre>" if game.start_game?(request_lines, path)
-  if path.start_with?("/game") && parser.get_verb(request_lines) == "POST"
+
+  #client.puts "<pre> Good Luck! </pre>" if game.start_game?(request_lines, path) && game.guess_counter == 0
+  if verb == "POST" && path.start_with?("/start_game") && game.guess_counter > 0
+    client.puts "HTTP/1.1 403 Forbidden\r\n\r\n#{"403 Forbidden\nGame in progress!"}"
+  elsif game.start_game?(request_lines, path)
+    client.puts "<pre> Good Luck! Use /start_game after guessing correctly to restart! </pre>"
+  elsif path.start_with?("/game") && verb == "POST"
     guess = parser.get_guess(path)
     client.puts "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:9292/game"
   elsif path.start_with?("/game")
@@ -48,9 +53,14 @@ loop do
     client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
     client.close
     break
-  else
+  elsif path == "/"
     output = response_parser.default_response(request_lines)
     client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+  elsif path == "/force_error"
+    client.puts "HTTP/1.1 500 INTERNAL SERVER ERROR \r\n\r\n500 Internal Server Error"
+    raise 'SystemError'
+  else
+    client.puts "HTTP/1.1 404 NOT FOUND\r\n\r\n404 NOT FOUND"
   end
 
   puts "Got this request:"

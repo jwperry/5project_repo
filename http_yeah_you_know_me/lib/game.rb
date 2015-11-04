@@ -21,6 +21,7 @@ class Game
   def check_guess(guess, answer)
     @guess_counter += 1
     return "#{guess} is not a number 0-10!" unless guess.to_s == (guess.to_i).to_s
+    @guess_counter = 0 if guess.to_i == answer
     return "#{guess} is correct!" if guess.to_i == answer
     return "#{guess} is too low!" if guess.to_i < answer
     return "#{guess} is too high!" if guess.to_i > answer
