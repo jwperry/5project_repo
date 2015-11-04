@@ -1,5 +1,5 @@
 require 'pry'
-require '../lib/parser'
+require './lib/parser'
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 
@@ -32,7 +32,6 @@ class ParserTest < Minitest::Test
   end
 
   def test_that_gets_origin
-    skip
     assert_equal "127.0.0.1", parser.get_origin(request_lines)
   end
 

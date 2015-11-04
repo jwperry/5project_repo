@@ -1,5 +1,5 @@
 require 'pry'
-require '../lib/response_parser'
+require './lib/response_parser'
 require 'socket'
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
@@ -38,5 +38,33 @@ class ResponseParserTest < Minitest::Test
     assert_equal response, @response_parser.hello_response(hello_counter)
   end
 
+  def test_that_datetime_response_returns_correct_string
+    time = DateTime.now
+    response = time.strftime('%l:%M%P on %A, %B %-d, %Y')
+    assert_equal "<html><head></head><body><pre>" + response + "</pre></body></html>", @response_parser.datetime_response
+  end
+
+  def test_that_shutdown_response_returns_correct_string
+    response = "<html><head></head><body><pre>Total Requests: (5)</pre></body></html>"
+    assert_equal response, @response_parser.shutdown_response(5)
+  end
+
+  def test_that_check_for_word_finds_real_word
+    assert @response_parser.check_for_word("car")
+  end
+
+  def test_that_check_for_word_returns_false_for_fake_word
+    refute @response_parser.check_for_word("aanoks")
+  end
+
+  def test_that_word_search_response_returns_correct_string_if_word_is_known
+    response = "<html><head></head><body><pre>" + "HAT is a known word." + "</pre></body></html>"
+    assert_equal response, @response_parser.word_search_response("hat")
+  end
+
+  def test_that_word_search_response_returns_correct_string_if_word_is_unknown
+    response = "<html><head></head><body><pre>" + "HATTT is not a known word." + "</pre></body></html>"
+    assert_equal response, @response_parser.word_search_response("hattt")
+  end
 
 end

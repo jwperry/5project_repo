@@ -1,6 +1,6 @@
 require 'pry'
 require 'socket'
-require './response_parser'
+require_relative 'response_parser'
 require_relative 'parser'
 
 parser = Parser.new
