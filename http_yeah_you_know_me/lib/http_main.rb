@@ -18,8 +18,6 @@ loop do
   puts "Ready for a request"
   client = tcp_server.accept
 
-  # "POST /game?guess=4 HTTP/1.1",
-
   while line = client.gets and !line.chomp.empty?
     request_lines << line.chomp
   end
@@ -28,30 +26,36 @@ loop do
   client.puts "<pre> Good Luck! </pre>" if game.start_game?(request_lines, path)
   if path.start_with?("/game") && parser.get_verb(request_lines) == "POST"
     guess = parser.get_guess(path)
-    `curl -G --data guess=6 "127.0.0.1.9292/game"`
+    client.puts "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:9292/game?guess=#{guess}"
+    client.close
   elsif path.start_with?("/game")
     guess = parser.get_guess(path)
     output = game.check_guess(guess)
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+    client.close
   elsif path.start_with?("/word_search")
     word = parser.get_word(path)
     output = response_parser.word_search_response(word)
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+    client.close
   elsif path == "/hello"
     hello_counter += 1
     output = response_parser.hello_response(hello_counter)
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+    client.close
   elsif path == "/datetime"
     output = response_parser.datetime_response
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+    client.close
   elsif path == "/shutdown"
     output = response_parser.shutdown_response(counter)
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
     client.close
     break
   else
     output = response_parser.default_response(request_lines)
-    client.puts output
+    client.puts "HTTP/1.1 200 OK\r\n\r\n#{output}"
+    client.close
   end
 
   puts "Got this request:"
