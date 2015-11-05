@@ -1,4 +1,3 @@
-require 'pry'
 require 'socket'
 require_relative 'game'
 require_relative 'server'
@@ -6,7 +5,6 @@ tcp_server = TCPServer.new(9292)
 game = Game.new
 server = Server.new
 counter = 0
-# guess = ""
 
 loop do
   counter += 1

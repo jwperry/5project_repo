@@ -1,9 +1,8 @@
-require 'pry'
 require 'date'
 require_relative 'parser'
 
 class ResponseParser
-  attr_reader :print_out, :parser
+  attr_reader :parser
 
   def initialize
     @parser = Parser.new
