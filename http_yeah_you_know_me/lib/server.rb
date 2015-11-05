@@ -40,9 +40,9 @@ class Server
     end
   end
 
-  def redirect(client, post_body_value)
+  def redirect(client, guess)
     if get_path.start_with?("/game") && get_verb == "POST"
-      @guess = post_body_value
+      @guess = guess
       client.puts "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:9292/game"
       return get_path.start_with?("/game") && get_verb == "POST"
     end
@@ -109,7 +109,7 @@ class Server
 
   def force_error(client)
     if get_path == "/force_error"
-      client.puts "HTTP/1.1 500 INTERNAL SERVER ERROR \r\n\r\n500 Internal Server Error"
+      client.puts "HTTP/1.1 500 INTERNAL SERVER ERROR \r\n\r\n500 Internal Server Error\r\nSystem Error\r\n#{caller.join("\n")}"
       return get_path == "/force_error"
     end
   end

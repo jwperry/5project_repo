@@ -14,12 +14,12 @@ loop do
   puts "Ready for a request"
   client = tcp_server.accept
 
- 
+
   while line = client.gets and !line.empty?
     request_lines << line.chomp
-    guess = request_lines.last if request_lines.length == 17    
+    guess = request_lines.last if request_lines.length == 17
     break if request_lines.length > 16
-    break if request_lines.first.split(" ")[0] = "GET" && line.chomp.empty?# && request_lines.length < 11
+    break if request_lines.first.split(" ")[0] = "GET" && line.chomp.empty? && request_lines.length < 11
   end
 
   server.update_request_lines(request_lines)
@@ -34,9 +34,9 @@ loop do
   elsif server.date_time(client)
   elsif server.default_response(client)
   elsif server.force_error(client)
-  else not_found(client)
+  else server.not_found(client)
   end
-  
+
   puts "Got this request:"
   puts request_lines.inspect
   client.close
