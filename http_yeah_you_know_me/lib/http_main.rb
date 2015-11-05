@@ -12,12 +12,11 @@ loop do
   puts "Ready for a request"
   client = tcp_server.accept
 
-
   while line = client.gets and !line.empty?
     request_lines << line.chomp
     guess = request_lines.last if request_lines.length == 17
     break if request_lines.length > 16
-    break if request_lines.first.split(" ")[0] = "GET" && line.chomp.empty? && request_lines.length < 11
+    break if request_lines.first.split(" ")[0] == "GET" && line.chomp.empty?
   end
 
   server.update_request_lines(request_lines)
