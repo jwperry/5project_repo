@@ -33,9 +33,9 @@ class Server
   end
 
   def start_game(client)
-    if @game.start_game?(@request_lines, get_path)
+    if @game.start_game?(get_path)
       client.puts "<pre> Good Luck! Use /start_game after guessing correctly to restart! </pre>"
-      return @game.start_game?(@request_lines, get_path)
+      return @game.start_game?(get_path)
     end
   end
 

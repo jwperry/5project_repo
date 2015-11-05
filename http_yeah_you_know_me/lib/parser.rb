@@ -29,10 +29,10 @@ class Parser
   end
 
   def get_word(path)
-    word = path.split("=")[1]
+    path.split("=")[1]
   end
 
   def get_guess(path)
-    guess = path.split("=")[1]
+    path.split("=")[1]
   end
 end

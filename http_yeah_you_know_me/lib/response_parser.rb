@@ -22,7 +22,7 @@ class ResponseParser
   def default_response(request_lines)
     puts "Sending response."
     response = "<pre>" + formatter(request_lines).join("\n") + "</pre>"
-    output = "<html><head></head><body>#{response}</body></html>"
+    "<html><head></head><body>#{response}</body></html>"
   end
 
   def hello_response(hello_counter)
@@ -34,12 +34,12 @@ class ResponseParser
     time = DateTime.now
     time_response = time.strftime('%l:%M%P on %A, %B %-d, %Y')
     response = "<pre>" + "#{time_response}" + "</pre>"
-    output = "<html><head></head><body>#{response}</body></html>"
+    "<html><head></head><body>#{response}</body></html>"
   end
 
   def shutdown_response(counter)
     response = "<pre>" + "Total Requests: (#{counter})" + "</pre>"
-    output = "<html><head></head><body>#{response}</body></html>"
+    "<html><head></head><body>#{response}</body></html>"
   end
 
   def word_search_response(word)
@@ -48,7 +48,7 @@ class ResponseParser
     else
       response = "<pre>" + "#{word.upcase} is not a known word." + "</pre>"
     end
-    output = "<html><head></head><body>#{response}</body></html>"
+    "<html><head></head><body>#{response}</body></html>"
   end
 
   def check_for_word(word)

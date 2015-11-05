@@ -9,7 +9,7 @@ class Game
     @parser = Parser.new
   end
 
-  def start_game?(request_lines, path)
+  def start_game?(path)
     game = path.start_with?("/start_game")
     @guess_counter = 0 if game
     @answer = rand(0..10) if game
