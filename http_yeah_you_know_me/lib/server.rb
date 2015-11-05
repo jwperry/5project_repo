@@ -27,9 +27,9 @@ class Server
   end
 
   def game_in_progress(guess_counter, client)
-    if get_verb == "POST" && get_path.start_with?("/start_game") && @game.guess_counter > 0
+    if get_path.start_with?("/start_game") && @game.guess_counter > 0
       client.puts "HTTP/1.1 403 Forbidden\r\n\r\n#{"403 Forbidden\nGame in progress!"}"
-      return get_verb == "POST" && get_path.start_with?("/start_game") && @game.guess_counter > 0
+      return get_path.start_with?("/start_game") && @game.guess_counter > 0
     end
   end
 
@@ -40,11 +40,18 @@ class Server
     end
   end
 
-  def redirect(client)
+  def redirect(client, post_body_value)
     if get_path.start_with?("/game") && get_verb == "POST"
-      @guess = @parser.get_guess(get_path)
+      @guess = post_body_value
       client.puts "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:9292/game"
       return get_path.start_with?("/game") && get_verb == "POST"
+    end
+  end
+
+  def new_game_redirect(client)
+    if x = get_path.start_with?("/new_game")
+      client.puts "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:9292/start_game"
+      return x
     end
   end
 

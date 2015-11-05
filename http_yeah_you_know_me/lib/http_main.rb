@@ -6,6 +6,7 @@ tcp_server = TCPServer.new(9292)
 game = Game.new
 server = Server.new
 counter = 0
+# guess = ""
 
 loop do
   counter += 1
@@ -13,15 +14,20 @@ loop do
   puts "Ready for a request"
   client = tcp_server.accept
 
-  while line = client.gets and !line.chomp.empty?
+ 
+  while line = client.gets and !line.empty?
     request_lines << line.chomp
+    guess = request_lines.last if request_lines.length == 17    
+    break if request_lines.length > 16
+    break if request_lines.first.split(" ")[0] = "GET" && line.chomp.empty?# && request_lines.length < 11
   end
 
   server.update_request_lines(request_lines)
   break if server.shutdown(client, counter)
-  if server.game_in_progress(game.guess_counter, client)
+  if server.redirect(client, guess)
+  elsif server.game_in_progress(game.guess_counter, client)
   elsif server.start_game(client)
-  elsif server.redirect(client)
+  elsif server.new_game_redirect(client)
   elsif server.check_guess(client)
   elsif server.word_search(client)
   elsif server.hello(client)

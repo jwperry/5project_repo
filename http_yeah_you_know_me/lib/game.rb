@@ -12,7 +12,7 @@ class Game
   end
 
   def start_game?(request_lines, path)
-    game = @parser.get_verb(request_lines) == "POST" && path.start_with?("/start_game")
+    game = path.start_with?("/start_game")
     @guess_counter = 0 if game
     @answer = rand(0..10) if game
     game
